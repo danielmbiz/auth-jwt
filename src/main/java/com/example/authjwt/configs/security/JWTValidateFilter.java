@@ -2,6 +2,7 @@ package com.example.authjwt.configs.security;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -14,9 +15,14 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import static com.example.authjwt.configs.security.JWTAuthenticateFilter.TOKEN_PASS;
+
 public class JWTValidateFilter extends BasicAuthenticationFilter {
     public static final String HEADER_ATTRIBUTE = "Authorization";
     public static final String ATTRIBUTE_PREFIX = "Bearer ";
+
+    @Value("${jwt.token.pass}")
+    private String tokenPass;
 
     public JWTValidateFilter(AuthenticationManager authenticationManager) {
         super(authenticationManager);
@@ -44,7 +50,7 @@ public class JWTValidateFilter extends BasicAuthenticationFilter {
     }
 
     private UsernamePasswordAuthenticationToken getAuthenticationToken(String token) {
-        String user = JWT.require(Algorithm.HMAC512(JWTAuthenticateFilter.TOKEN_PASS))
+        String user = JWT.require(Algorithm.HMAC512(TOKEN_PASS))
                 .build()
                 .verify(token)
                 .getSubject();
