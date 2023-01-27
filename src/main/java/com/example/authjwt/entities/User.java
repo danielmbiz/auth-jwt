@@ -1,5 +1,6 @@
 package com.example.authjwt.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -20,6 +21,7 @@ public class User {
     private String name;
     @Column(unique = true, nullable = false)
     private String email;
+    @JsonIgnore
     private String password;
 
 }
